@@ -1,0 +1,181 @@
+main > .container {
+    padding: 70px 15px 20px;
+}
+
+.not-set {
+    color: #c55;
+    font-style: italic;
+}
+
+:root {
+    --bs-light-rgb: 172, 255, 170;
+}
+
+/* add sorting icons to gridview sort links */
+a.asc:after, a.desc:after {
+    content: '';
+    left: 3px;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border: solid 5px transparent;
+    margin: 4px 4px 2px 4px;
+    background: transparent;
+}
+
+a.asc:after {
+    border-bottom: solid 7px #212529;
+    border-top-width: 0;
+}
+
+a.desc:after {
+    border-top: solid 7px #212529;
+    border-bottom-width: 0;
+}
+
+.grid-view th {
+    white-space: nowrap;
+}
+
+.hint-block {
+    display: block;
+    margin-top: 5px;
+    color: #999;
+}
+
+.error-summary {
+    color: #a94442;
+    background: #fdf7f7;
+    border-left: 3px solid #eed3d7;
+    padding: 10px 20px;
+    margin: 0 0 15px 0;
+}
+
+/* align the logout "link" (button in form) of the navbar */
+
+
+
+@media(max-width:767px) {
+    .nav li > form > button.logout {
+        display:block;
+        text-align: left;
+        width: 100%;
+        padding: 10px 0;
+    }
+}
+
+.nav > li > form > button.logout:focus,
+.nav > li > form > button.logout:hover {
+    text-decoration: none;
+    color: rgba(0, 0, 0);
+}
+
+.nav > li > form > button.logout:focus {
+    outline: none;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.navbar-nav {
+    --bs-nav-link-color: rgb(0, 0, 0);
+    --bs-nav-link-hover-color: rgb(117, 117, 117);
+}
+
+
+.navbar-expand-lg .navbar-collapse {
+    justify-content: flex-end;
+}
+
+.text-center {
+    text-align: left !important;
+}
+
+.btn-success {
+    --bs-btn-color: #000000;
+    --bs-btn-bg: rgb(172, 255, 170);
+    --bs-btn-border-color: #ffffff00;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: rgb(100, 163, 99);
+    --bs-btn-hover-border-color: #146c4300;
+}
+
+
+.btn-primary {
+    --bs-btn-color: #000000;
+    --bs-btn-bg: rgb(172, 255, 170);
+    --bs-btn-border-color: #ffffff00;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: rgb(100, 163, 99);
+    --bs-btn-hover-border-color: #146c4300;
+}
+
+.was-validated .form-check-input:valid ~ .form-check-label, .form-check-input.is-valid ~ .form-check-label {
+    color: #000000;
+}
+
+.was-validated .form-check-input:valid:checked, .form-check-input.is-valid:checked {
+    background-color: rgb(172, 255, 170);
+}
+
+.form-check-input:checked {
+    background-color: rgb(172, 255, 170);
+    border-color: #0d6dfd00;
+}
+
+
+
+.invalid-feedback {
+    color: rgb(0, 0, 0);
+}
+
+.bacimg {
+    background: url('/uploads/chea.jpg') no-repeat center center fixed;
+    background-size: cover; 
+    margin: 0; 
+    padding: 0;
+    height: 100vh; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff; 
+    font-family: Arial, sans-serif; 
+}
+
+.btn-ma {
+    padding: 0.8em 1.8em;
+    border: 2px solid rgb(172, 255, 170);
+    position: relative;
+    overflow: hidden;
+    background-color: transparent;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 16px;
+    transition: .3s;
+    z-index: 1;
+    font-family: inherit;
+    color: rgb(172, 255, 170);
+   }
+   
+   .btn-ma::before {
+    content: '';
+    width: 0;
+    height: 300%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    background: rgb(172, 255, 170);
+    transition: .5s ease;
+    display: block;
+    z-index: -1;
+   }
+   
+   .btn-ma:hover::before {
+    width: 105%;
+   }
+
+   .btn-ma:hover {
+    color: #111;
+   }
