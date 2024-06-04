@@ -3,10 +3,8 @@
  * Страница корзины покупателя, файл views/basket/index.php
  */
 
-
 use yii\helpers\Html;
 use yii\helpers\Url;
-
 
 $this->registerJs(<<<JS
 $('.js-input').on('input', function (e) {
