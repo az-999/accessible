@@ -114,15 +114,11 @@ class SiteController extends Controller
         if (Yii::$app->user->isGuest) {
             return ['code' => 401];
         }
-
         $id = Yii::$app->request->post('id');
-
         $i = Favorite::find()->where(['user_id' => Yii::$app->user->id, 'product_id' => $id])->one();
-
         if (is_null($i)) {
             return ['code' => 404];
         }
-
         $i->delete();
 
         return ['code' => 200];
