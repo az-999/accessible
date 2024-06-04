@@ -1,12 +1,15 @@
 <?php
 
-/** @var array $arr_products */
-/** @var integer | null $category_id */
-
+use app\models\Favorite;
+use app\models\Product;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = 'Каталог';
+$ids = Favorite::find()->select('product_id')->where(['user_id' => Yii::$app->user->id])->column();
+
+$arr_products = Product::find()->where(['id' => $ids])->all();
+
+$this->title = 'Избранное';
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile('https://code.jquery.com/ui/1.13.2/jquery-ui.js', ['depends' => ['\yii\web\JqueryAsset']]);
@@ -25,13 +28,13 @@ $( ".js-search" ).autocomplete({
 $( ".js-favorite" ).click(function (e){
     
     $.ajax({
-        url: '/site/favorite-ajax',
+        url: '/site/favorite-remove',
         type: 'post',
         data: {
             id: $(this).data('id')
         },
         success: function (data) {
-            $('#exampleModal2').css('display', 'block');
+            window.location.reload();
         }
     })
 });
@@ -57,7 +60,6 @@ $('[data-bs-toggle="tooltip"]').tooltip();
 JS
 );
 
-$ids = \app\models\Favorite::find()->select('product_id')->where(['user_id' => Yii::$app->user->id])->column();
 
 ?>
 <style>
@@ -82,19 +84,7 @@ $ids = \app\models\Favorite::find()->select('product_id')->where(['user_id' => Y
 
         <div class="row">
 
-            <div class="col-lg-6" style="margin-bottom: 20px;">
-                <input class="form-control js-search" data-bs-toggle="tooltip" data-bs-title="Поиск по названию товара">
-            </div>
-            <div class="col-lg-6" style="margin-bottom: 20px;">
-                <select class="form-control js-select" data-bs-toggle="tooltip" data-bs-title="Фильтр по категории">
-                    <option value="">Выбрать категорию</option>
-                    <?php foreach (\app\models\Category::find()->all() as $category) { ?>
-                        <option value="<?= $category->id ?>" <?= $category->id == $category_id ? 'selected' : '' ?>><?= $category->name ?></option>
-                    <?php } ?>
-                </select>
-            </div>
 
-        
             <?php foreach ($arr_products as $products): ?>
                 <div class="col-lg-4">
                     <img src="/uploads/<?= $products->photo ?>" width="250" height="270" alt="img">
@@ -138,11 +128,8 @@ $ids = \app\models\Favorite::find()->select('product_id')->where(['user_id' => Y
                     ';
                     endif;
                     ?>
-                    <?php if (!Yii::$app->user->isGuest) { ?>
-                        <?php if (!in_array($products->id, $ids)) { ?>
-                            <button data-id="<?= $products->id ?>" class="bt-k js-favorite">Добавить в избранное</button>
-                        <?php } ?>
-                    <?php } ?>
+                    <button data-id="<?= $products->id ?>" class="bt-k js-favorite">Убрать из избранного</button>
+
                 </div>
             <?php endforeach; ?>
 
@@ -168,6 +155,7 @@ $ids = \app\models\Favorite::find()->select('product_id')->where(['user_id' => Y
         </div>
     </div>
 </div>
+
 <div class="modal"  id="exampleModal2" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -176,7 +164,7 @@ $ids = \app\models\Favorite::find()->select('product_id')->where(['user_id' => Y
                 <button type="button" class="btn-close js-close2" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Товар добавлен в избранное.</p>
+                <p>Товар удален из избранного.</p>
             </div>
         </div>
     </div>

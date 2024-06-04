@@ -68,6 +68,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             $items[]=['label' => 'Корзина', 'url' => ['/basket']];
             $items[]=['label' => 'Личный кабинет', 'url' => ['/lk']];
         }
+        $items[]=['label' => 'Избранное', 'url' => ['/site/favorite']];
         $items[] = '<li class="nav-item">'
             . Html::beginForm(['/site/logout'])
             . Html::submitButton(

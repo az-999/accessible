@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\Basket;
+use app\models\Favorite;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\VarDumper;
@@ -66,6 +68,64 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
+    }
+
+    /**
+     * Displays homepage.
+     *
+     * @return string
+     */
+    public function actionFavorite()
+    {
+        return $this->render('favorite');
+    }
+
+    /**
+     */
+    public function actionFavoriteAjax()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if (Yii::$app->user->isGuest) {
+            return ['code' => 401];
+        }
+
+        $id = Yii::$app->request->post('id');
+
+        if (Favorite::find()->where(['user_id'    => Yii::$app->user->id,'product_id' => $id])->exists()) {
+            return ['code' => 201];
+        }
+
+        $f = new Favorite([
+            'user_id'    => Yii::$app->user->id,
+            'product_id' => $id,
+        ]);
+        $f->save();
+
+        return ['code' => 200];
+    }
+
+    /**
+     */
+    public function actionFavoriteRemove()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if (Yii::$app->user->isGuest) {
+            return ['code' => 401];
+        }
+
+        $id = Yii::$app->request->post('id');
+
+        $i = Favorite::find()->where(['user_id' => Yii::$app->user->id, 'product_id' => $id])->one();
+
+        if (is_null($i)) {
+            return ['code' => 404];
+        }
+
+        $i->delete();
+
+        return ['code' => 200];
     }
 
     /**
