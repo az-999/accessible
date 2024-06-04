@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
@@ -130,12 +131,21 @@ class SiteController extends Controller
         return $this->render('about', ['products'=>$products]);
     }
     
-
     public function actionCatalog()
     {
-        $arr_products = Product::find()->orderBy(['timestamp' => SORT_DESC])->all();
-        return $this->render('catalog', ['arr_products'=>$arr_products]);
+        $category_id = Yii::$app->request->get('category_id');
+        $query = Product::find()->orderBy(['timestamp' => SORT_DESC]);
+        if (!is_null($category_id)) {
+            if ($category_id) {
+                $query->where(['id_category' => $category_id]);
+            }
+        }
+        $arr_products = $query->all();
 
+        return $this->render('catalog', [
+            'arr_products' => $arr_products,
+            'category_id'  => $category_id,
+        ]);
     }
 
 

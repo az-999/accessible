@@ -1,6 +1,7 @@
 <?php
 
 /** @var array $arr_products */
+/** @var integer | null $category_id */
 
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -14,14 +15,17 @@ $city_list = \app\models\Product::find()->select(['name as value', 'id'])->asArr
 $city_list_json = \yii\helpers\Json::encode($city_list);
 $this->registerJs(<<<JS
 
-    var availableTags = {$city_list_json};
-    $( ".js-search" ).autocomplete({
-        source: availableTags,
-        select: function(event, ui) {
-            window.location = '/catalog/product?id=' + ui.item.id;
-        }
-    });
+var availableTags = {$city_list_json};
+$( ".js-search" ).autocomplete({
+    source: availableTags,
+    select: function(event, ui) {
+        window.location = '/catalog/product?id=' + ui.item.id;
+    }
+});
 
+$('.js-select').change(function(e) {
+    window.location = '/site/catalog?category_id=' + $(this).val();
+})
 
 JS
 );
@@ -42,8 +46,16 @@ JS
 
         <div class="row">
 
-            <div class="col-lg-12" style="margin-bottom: 20px;">
+            <div class="col-lg-6" style="margin-bottom: 20px;">
                 <input class="form-control js-search">
+            </div>
+            <div class="col-lg-6" style="margin-bottom: 20px;">
+                <select class="form-control js-select">
+                    <option value="">Ничего не выбрано</option>
+                    <?php foreach (\app\models\Category::find()->all() as $category) { ?>
+                        <option value="<?= $category->id ?>" <?= $category->id == $category_id ? 'selected' : '' ?>><?= $category->name ?></option>
+                    <?php } ?>
+                </select>
             </div>
 
         
