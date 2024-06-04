@@ -10,14 +10,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile('https://code.jquery.com/ui/1.13.2/jquery-ui.js', ['depends' => ['\yii\web\JqueryAsset']]);
 
-$city_list = \app\models\Product::find()->select('name')->column();
+$city_list = \app\models\Product::find()->select(['name as value', 'id'])->asArray()->all();
 $city_list_json = \yii\helpers\Json::encode($city_list);
 $this->registerJs(<<<JS
 
     var availableTags = {$city_list_json};
     $( ".js-search" ).autocomplete({
-        source: availableTags
-        
+        source: availableTags,
+        select: function(event, ui) {
+            window.location = '/catalog/product?id=' + ui.item.id;
+        }
     });
 
 

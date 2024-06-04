@@ -5,10 +5,11 @@
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
-    <ul>
-        <li><a href="/web/user">Управление пользователями</a></li>
-        <li><a href="/web/category">Управление категориями</a></li>
-        <li><a href="/web/product">Управление товарами</a></li>
-        <li><a href="/web/order">Управление заказами</a></li>
-    </ul>
+    <div class="btn-group-vertical" role="group" aria-label="Basic checkbox toggle button group">
+        <a class="btn btn-outline-primary" href="/user">Управление пользователями</a>
+        <a class="btn btn-outline-primary" href="/category">Управление категориями</a>
+        <a class="btn btn-outline-primary" href="/product">Управление товарами</a>
+        <a class="btn btn-outline-primary" href="/order" >Управление заказами</a>
+    </div>
+
 </div>

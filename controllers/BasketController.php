@@ -3,12 +3,39 @@ namespace app\controllers;
 
 use app\models\Basket;
 use Yii;
+use yii\helpers\ArrayHelper;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
 
-class BasketController extends Controller {
-    public function actionIndex() {
+class BasketController extends Controller
+{
+    public function actionIndex()
+    {
         $basket = (new Basket())->getBasket();
         return $this->render('index', ['basket' => $basket]);
+    }
+
+    public function actionAjax()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $basket = new Basket();
+
+        $id = Yii::$app->request->post('id');
+        $count = Yii::$app->request->post('count');
+        $data = $basket->getBasket();
+        foreach ($data['products'] as $k => $v) {
+            if ($k == $id) {
+                $data['products'][$id]['count'] = $count;
+            }
+        }
+        $update = ['count' => []];
+        foreach ($data['products'] as $k => $v) {
+            $update['count'][$k] = $v['count'];
+        }
+        $basket->updateBasket($update);
+
+        return ['code' => 200];
     }
 
     public function actionAdd() {

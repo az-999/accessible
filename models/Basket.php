@@ -102,7 +102,8 @@ class Basket extends Model {
         $session->set('basket', []);
     }
 
-    public function updateBasket($data) {
+    public function updateBasket($data)
+    {
         $this->clearBasket();
         foreach ($data['count'] as $id => $count) {
             $this->addToBasket($id, $count);
