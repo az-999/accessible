@@ -13,6 +13,7 @@ $this->registerJsFile('https://code.jquery.com/ui/1.13.2/jquery-ui.js', ['depend
 
 $city_list = \app\models\Product::find()->select(['name as value', 'id'])->asArray()->all();
 $city_list_json = \yii\helpers\Json::encode($city_list);
+
 $this->registerJs(<<<JS
 
 var availableTags = {$city_list_json};
@@ -119,25 +120,21 @@ $ids = \app\models\Favorite::find()->select('product_id')->where(['user_id' => Y
                     </h6>
                     <h4><p>Цена: <?= $products->price ?> Р</p></h4>
 
-                    <div class="btn-group btn-group-xs" role="group" aria-label="..." style="margin-bottom: 10px;">
-                        <button type="button" class="btn btn-outline-primary js-rating"  data-bs-toggle="tooltip" data-bs-title="Поставить рейтинг 1">1</button>
-                        <button type="button" class="btn btn-outline-primary js-rating" data-bs-toggle="tooltip" data-bs-title="Поставить рейтинг 2">2</button>
-                        <button type="button" class="btn btn-outline-primary js-rating" data-bs-toggle="tooltip" data-bs-title="Поставить рейтинг 3">3</button>
-                        <button type="button" class="btn btn-outline-primary js-rating" data-bs-toggle="tooltip" data-bs-title="Поставить рейтинг 4">4</button>
-                        <button type="button" class="btn btn-outline-primary js-rating" data-bs-toggle="tooltip" data-bs-title="Поставить рейтинг 5">5</button>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="..." style="margin-bottom: 10px;">
+                        <button type="button" class="btn btn-outline-primary js-rating"  data-bs-toggle="tooltip" data-bs-title="Поставить рейтинг 1">★</button>
+                        <button type="button" class="btn btn-outline-primary js-rating" data-bs-toggle="tooltip" data-bs-title="Поставить рейтинг 2">★</button>
+                        <button type="button" class="btn btn-outline-primary js-rating" data-bs-toggle="tooltip" data-bs-title="Поставить рейтинг 3">★</button>
+                        <button type="button" class="btn btn-outline-primary js-rating" data-bs-toggle="tooltip" data-bs-title="Поставить рейтинг 4">★</button>
+                        <button type="button" class="btn btn-outline-primary js-rating" data-bs-toggle="tooltip" data-bs-title="Поставить рейтинг 5">★</button>
                     </div>
 
-                    <?php
-                    if (!Yii::$app->user->isGuest):
-                        echo '
-                    <form method="post" action=' . Url::to(['basket/add']) . '>      
-                    <input type="hidden" name="id" value=' . $products->id . '>
-                    ' . Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) . '
-                    <button type="submit" class="bt-k">Добавить в корзину</button>
-                    </form>
-                    ';
-                    endif;
-                    ?>
+                    <?php if (!Yii::$app->user->isGuest) { ?>
+                        <form method="post" action="<?= Url::to(['basket/add']) ?>">
+                            <input type="hidden" name="id" value="<?= $products->id ?>">
+                            <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
+                            <button type="submit" class="bt-k">Добавить в корзину</button>
+                        </form>
+                    <?php } ?>
                     <?php if (!Yii::$app->user->isGuest) { ?>
                         <?php if (!in_array($products->id, $ids)) { ?>
                             <button data-id="<?= $products->id ?>" class="bt-k js-favorite">Добавить в избранное</button>
@@ -145,11 +142,7 @@ $ids = \app\models\Favorite::find()->select('product_id')->where(['user_id' => Y
                     <?php } ?>
                 </div>
             <?php endforeach; ?>
-
-            
-        
         </div>
-
     </div>
 </div>
 

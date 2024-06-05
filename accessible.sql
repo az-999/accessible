@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Хост: 127.0.0.1:3306
--- Время создания: Янв 23 2024 г., 22:28
--- Версия сервера: 5.7.39
--- Версия PHP: 8.1.9
+-- Хост: mysql
+-- Время создания: Июн 05 2024 г., 10:21
+-- Версия сервера: 8.0.36
+-- Версия PHP: 8.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,8 +28,8 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `category` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `id` int NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -37,7 +37,9 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `name`) VALUES
-(1, 'Чехлыы');
+(1, 'Чехлыы'),
+(2, 'Телефоны'),
+(3, 'Брелки');
 
 -- --------------------------------------------------------
 
@@ -46,13 +48,52 @@ INSERT INTO `category` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `client_order` (
-  `id` int(11) NOT NULL,
-  `name_client` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `id_user` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `name_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_user` int NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `desmiss` text COLLATE utf8mb4_unicode_ci,
-  `id_status` int(11) NOT NULL DEFAULT '1'
+  `desmiss` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `id_status` int NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `favorite`
+--
+
+CREATE TABLE `favorite` (
+  `id` int NOT NULL,
+  `user_id` int DEFAULT NULL,
+  `product_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `favorite`
+--
+
+INSERT INTO `favorite` (`id`, `user_id`, `product_id`) VALUES
+(6, 2, 3),
+(7, 2, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `migration`
+--
+
+CREATE TABLE `migration` (
+  `version` varchar(180) NOT NULL,
+  `apply_time` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `migration`
+--
+
+INSERT INTO `migration` (`version`, `apply_time`) VALUES
+('m000000_000000_base', 1717523299),
+('m240604_174714_favorite', 1717523300);
 
 -- --------------------------------------------------------
 
@@ -61,13 +102,13 @@ CREATE TABLE `client_order` (
 --
 
 CREATE TABLE `order` (
-  `id` int(11) NOT NULL,
-  `name_client` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` int NOT NULL,
+  `name_client` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `desmiss` text COLLATE utf8mb4_unicode_ci,
-  `id_user` int(11) NOT NULL,
-  `id_status` int(11) NOT NULL DEFAULT '1',
-  `count` int(11) NOT NULL
+  `desmiss` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `id_user` int NOT NULL,
+  `id_status` int NOT NULL DEFAULT '1',
+  `count` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -84,12 +125,12 @@ INSERT INTO `order` (`id`, `name_client`, `timestamp`, `desmiss`, `id_user`, `id
 --
 
 CREATE TABLE `product` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `photo` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` int NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `photo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,0) NOT NULL,
-  `compound` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `id_category` int(11) NOT NULL,
+  `compound` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_category` int NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -98,8 +139,9 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `name`, `photo`, `price`, `compound`, `id_category`, `timestamp`) VALUES
-(1, 'Для айфона', '96f5d8492e8680ae0bcc5f409163bb75.jpg', '231', 'вцФвцфвфцв', 1, '2024-01-20 19:55:00'),
-(2, 'вцфвфцвфцв', '7f6bdbf29b567669ed78228214e2dcb3.jpg', '321', 'пкгыпиукгнптакшщгыатгукшатгшкытгашктшгмткугташкутшмгткушташктуаштукшатук', 1, '2024-01-20 19:58:02');
+(1, 'Для айфона', '96f5d8492e8680ae0bcc5f409163bb75.jpg', 231, 'вцФвцфвфцв', 1, '2024-01-20 19:55:00'),
+(2, 'вцфвфцвфцв', '7f6bdbf29b567669ed78228214e2dcb3.jpg', 321, 'пкгыпиукгнптакшщгыатгукшатгшкытгашктшгмткугташкутшмгткушташктуаштукшатук', 1, '2024-01-20 19:58:02'),
+(3, 'Брелок 1', '8caff2658541d166daf6a61fdbfc0f67.png', 100, 'Металл', 2, '2024-06-04 13:14:08');
 
 -- --------------------------------------------------------
 
@@ -108,9 +150,9 @@ INSERT INTO `product` (`id`, `name`, `photo`, `price`, `compound`, `id_category`
 --
 
 CREATE TABLE `products_order` (
-  `id` int(11) NOT NULL,
-  `id_order` int(11) NOT NULL,
-  `id_product` int(11) NOT NULL
+  `id` int NOT NULL,
+  `id_order` int NOT NULL,
+  `id_product` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -120,8 +162,8 @@ CREATE TABLE `products_order` (
 --
 
 CREATE TABLE `role` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `id` int NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -139,8 +181,8 @@ INSERT INTO `role` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `status` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `id` int NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -159,12 +201,12 @@ INSERT INTO `status` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `login` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `id_role` int(11) NOT NULL DEFAULT '2'
+  `id` int NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `login` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_role` int NOT NULL DEFAULT '2'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -192,6 +234,19 @@ ALTER TABLE `client_order`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_status` (`id_status`),
   ADD KEY `id_user` (`id_user`);
+
+--
+-- Индексы таблицы `favorite`
+--
+ALTER TABLE `favorite`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx-favorite-user_id` (`user_id`);
+
+--
+-- Индексы таблицы `migration`
+--
+ALTER TABLE `migration`
+  ADD PRIMARY KEY (`version`);
 
 --
 -- Индексы таблицы `order`
@@ -245,37 +300,43 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT для таблицы `client_order`
 --
 ALTER TABLE `client_order`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `favorite`
+--
+ALTER TABLE `favorite`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT для таблицы `order`
 --
 ALTER TABLE `order`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT для таблицы `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT для таблицы `products_order`
 --
 ALTER TABLE `products_order`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `status`
 --
 ALTER TABLE `status`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT для таблицы `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
